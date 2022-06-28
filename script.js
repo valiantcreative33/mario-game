@@ -4,7 +4,7 @@ const c = canvas.getContext('2d');
 canvas.width = innerWidth
 canvas.height = innerHeight
 
-class player {
+class Player {
     constructor() {
         this.position = {
             x: 100,
@@ -15,9 +15,10 @@ class player {
     }
 
     draw() {
+        c.fillStyle = 'blue';
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 }
 
-const player = newPlayer()
+const player = new Player()
 player.draw()
