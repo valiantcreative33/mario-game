@@ -67,6 +67,8 @@ const keys = {
     },
 }
 
+let scrollOffset = 0
+
 function animate() {
     requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
@@ -84,12 +86,14 @@ function animate() {
         player.velocity.x = 0
 
         if (keys.right.pressed) {
-        platforms.forEach((platform) => {
+            scrollOffset += 5
+            platforms.forEach((platform) => {
             platform.position.x -= 7
         })
         
         } else if (keys.left.pressed) {
-        platforms.forEach((platform) => {
+            scrollOffset -= 5
+            platforms.forEach((platform) => {
             platform.position.x += 7
         })
         }
@@ -106,9 +110,13 @@ function animate() {
             <= platform.position.x + platform.width
             ) {
             player.velocity.y = 0
+            }
+        })
+
+        if (scrollOffset > 1000) {
+            console.log('You Win!');
         }
-    })
-}
+    }
 
 animate()
 
