@@ -1,1 +1,1 @@
-# Mario Game
+## Mario Game with Pure JavaScript
