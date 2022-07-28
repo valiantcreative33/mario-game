@@ -8,7 +8,7 @@ const c = canvas.getContext('2d');
 canvas.width = 1024
 canvas.height = 576
 
-const gravity = 1.5
+const gravity = 3.3
 class Player {
     constructor() {
         this.position = {
@@ -36,7 +36,6 @@ class Player {
         if (this.position.y + this.height +
             this.velocity.y <= canvas.height)
             this.velocity.y += gravity
-        else this.velocity.y = 0
     }
 }
 
@@ -84,10 +83,10 @@ function createImage(imageSrc) {
     return image
 }
 
-const platformImage = createImage(platform)
+let platformImage = createImage(platform)
 
-const player = new Player()
-const platforms = [
+let player = new Player()
+let platforms = [
     new Platform({
         x: -0, 
         y: 470,
@@ -97,10 +96,15 @@ const platforms = [
         x: platformImage.width - 2,
         y: 470,
         image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 2.10 + 100,
+        y: 470,
+        image: platformImage
     })
 ]
 
-const genericObjects = [
+let genericObjects = [
     new GenericObject({
         x: -1,
         y: -1,
@@ -124,6 +128,45 @@ const keys = {
 
 let scrollOffset = 0
 
+function init() {
+
+    platformImage = createImage(platform)
+
+    player = new Player()
+    platforms = [
+    new Platform({
+        x: -0, 
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width - 2,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 2.10 + 100,
+        y: 470,
+        image: platformImage
+    })
+    ]
+
+    genericObjects = [
+    new GenericObject({
+        x: -1,
+        y: -1,
+        image: createImage(background)
+    }),
+    new GenericObject({
+        x: -1,
+        y: -1,
+        image: createImage(hills)
+    })
+    ]
+
+    scrollOffset = 0
+}
+
 function animate() {
     requestAnimationFrame(animate)
     c.fillStyle = 'white'
@@ -138,9 +181,9 @@ function animate() {
     })
     player.update()
 
-    if (keys.right.pressed && player.position.x < 1000) {
+    if (keys.right.pressed && player.position.x < 500) {
         player.velocity.x = 7
-    } else if (keys.left.pressed && player.position.x > 100) {
+    } else if (keys.left.pressed && player.position.x > 200) {
         player.velocity.x = -7
     } else {
         player.velocity.x = 0
@@ -181,8 +224,14 @@ function animate() {
             }
         })
 
+        // win condition
         if (scrollOffset > 1000) {
             console.log('You Win!');
+        }
+
+        // lose condition
+        if (player.position.y > canvas.height) {
+            init()
         }
     }
 
