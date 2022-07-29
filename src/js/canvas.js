@@ -1,6 +1,7 @@
 import platform from '../images/platform.png'
 import hills from '../images/hills.png'
 import background from '../images/background.png'
+import platformSmallTall from '../images/platformSmallTall.png'
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -11,6 +12,7 @@ canvas.height = 576
 const gravity = 3.3
 class Player {
     constructor() {
+        this.speed = 9
         this.position = {
             x: 100,
             y: 100,
@@ -84,38 +86,11 @@ function createImage(imageSrc) {
 }
 
 let platformImage = createImage(platform)
+// let platformSmallTall = createImage(platformSmallTall)
 
 let player = new Player()
-let platforms = [
-    new Platform({
-        x: -0, 
-        y: 470,
-        image: platformImage
-    }),
-    new Platform({
-        x: platformImage.width - 2,
-        y: 470,
-        image: platformImage
-    }),
-    new Platform({
-        x: platformImage.width * 2.10 + 100,
-        y: 470,
-        image: platformImage
-    })
-]
-
-let genericObjects = [
-    new GenericObject({
-        x: -1,
-        y: -1,
-        image: createImage(background)
-    }),
-    new GenericObject({
-        x: -1,
-        y: -1,
-        image: createImage(hills)
-    })
-]
+let platforms = []
+let genericObjects = []
 
 const keys = {
     right: {
@@ -135,6 +110,11 @@ function init() {
     player = new Player()
     platforms = [
     new Platform({
+        x: platformImage.width * 4.50 + 300,
+        y: 375,
+        image: createImage(platformSmallTall)
+    }),
+    new Platform({
         x: -0, 
         y: 470,
         image: platformImage
@@ -148,6 +128,36 @@ function init() {
         x: platformImage.width * 2.10 + 100,
         y: 470,
         image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 3.40 + 200,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 5.50 + 300,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 7.00 + 300,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 8.25 + 300,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 9.25 + 300 -2,
+        y: 470,
+        image: platformImage
+    }),
+    new Platform({
+        x: platformImage.width * 10.25 + 300 -2,
+        y: 370,
+        image: createImage(platformSmallTall)
     })
     ]
 
@@ -182,30 +192,30 @@ function animate() {
     player.update()
 
     if (keys.right.pressed && player.position.x < 500) {
-        player.velocity.x = 7
-    } else if (keys.left.pressed && player.position.x > 200) {
-        player.velocity.x = -7
+        player.velocity.x = player.speed
+    } else if (keys.left.pressed && player.position.x > 400) {
+        player.velocity.x = -player.speed
     } else {
         player.velocity.x = 0
 
         if (keys.right.pressed) {
-            scrollOffset += 5
+            scrollOffset += player.speed
             platforms.forEach((platform) => {
-            platform.position.x -= 7
+            platform.position.x -= player.speed
         })
 
         genericObjects.forEach((genericObject) => {
-            genericObject.position.x -= 3
+            genericObject.position.x -= player.speed * .77
         })
         
         } else if (keys.left.pressed) {
-            scrollOffset -= 5
+            scrollOffset -= player.speed
             platforms.forEach((platform) => {
-            platform.position.x += 7
+            platform.position.x += player.speed
         })
 
         genericObjects.forEach((genericObject) => {
-            genericObject.position.x += 3
+            genericObject.position.x += player.speed * .77
         })
         }
     }
@@ -225,7 +235,7 @@ function animate() {
         })
 
         // win condition
-        if (scrollOffset > 1000) {
+        if (scrollOffset > platformImage.width * 10.00 + 300 -2) {
             console.log('You Win!');
         }
 
@@ -235,6 +245,7 @@ function animate() {
         }
     }
 
+init()
 animate()
 
 addEventListener('keydown', ({ keyCode }) => {
@@ -255,7 +266,7 @@ addEventListener('keydown', ({ keyCode }) => {
 
         case 87:
             console.log('up');
-            player.velocity.y -= 20
+            player.velocity.y -= 33
             break
     }
 })
@@ -278,7 +289,6 @@ addEventListener('keyup', ({ keyCode }) => {
 
         case 87:
             console.log('up');
-            player.velocity.y -= 15
             break
     }
 })
